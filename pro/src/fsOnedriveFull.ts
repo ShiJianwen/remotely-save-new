@@ -607,7 +607,7 @@ export class FakeFsOnedriveFull extends FakeFs {
     } else {
       const res = await fetch(theUrl, {
         method: "PUT",
-        body: payload.subarray(rangeStart, rangeEnd),
+        body: payload.subarray(rangeStart, rangeEnd) as unknown as BodyInit,
         headers: {
           "Content-Length": `${rangeEnd - rangeStart}`,
           "Content-Range": `bytes ${rangeStart}-${rangeEnd - 1}/${size}`,

@@ -65,6 +65,14 @@ module.exports = {
     new webpack.ProvidePlugin({
       process: "process/browser",
     }),
+    new webpack.NormalModuleReplacementPlugin(/^node:/, (resource) => {
+      const mod = resource.request.replace(/^node:/, "");
+      if (mod === "url") {
+        resource.request = path.resolve(__dirname, "src/url-polyfill.js");
+      } else {
+        resource.request = mod;
+      }
+    }),
   ],
   module: {
     rules: [
@@ -121,7 +129,7 @@ module.exports = {
       // timers: require.resolve("timers-browserify"),
       tls: false,
       // tty: require.resolve("tty-browserify"),
-      url: require.resolve("url/"),
+      url: path.resolve(__dirname, "src/url-polyfill.js"),
       // util: require.resolve("util"),
       // vm: require.resolve("vm-browserify"),
       vm: false,

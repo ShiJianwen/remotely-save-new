@@ -14,7 +14,10 @@
     "esModuleInterop": true,
     "importHelpers": true,
     "isolatedModules": true,
-    "lib": ["dom", "es5", "scripthost", "es2015", "webworker"]
+    "lib": ["dom", "es5", "scripthost", "es2015", "webworker"],
+    "paths": {
+      "node-diff3": ["./node_modules/node-diff3/src/diff3.d.ts"]
+    }
   },
   "include": ["src/global.d.ts", "**/*.ts"]
 }
