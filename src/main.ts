@@ -137,6 +137,8 @@ const DEFAULT_SETTINGS: RemotelySavePluginSettings = {
   syncConfigDir: false,
   syncBookmarks: false,
   syncUnderscoreItems: false,
+  syncDotItems: false,
+  syncDotFolders: [],
   lang: "auto",
   logToDB: false,
   skipSizeLargerThan: -1,
@@ -247,7 +249,9 @@ export default class RemotelySavePlugin extends Plugin {
       this.app.vault.configDir,
       this.manifest.id,
       profiler,
-      this.settings.deleteToWhere ?? "system"
+      this.settings.deleteToWhere ?? "system",
+      this.settings.syncDotItems ?? false,
+      this.settings.syncDotFolders ?? []
     );
     const fsRemote = getClient(
       this.settings,
@@ -1906,7 +1910,9 @@ export default class RemotelySavePlugin extends Plugin {
                   this.app.vault.configDir,
                   this.manifest.id,
                   undefined,
-                  this.settings.deleteToWhere ?? "system"
+                  this.settings.deleteToWhere ?? "system",
+                  this.settings.syncDotItems ?? false,
+                  this.settings.syncDotFolders ?? []
                 );
                 const s = await fsLocal.stat(filePath);
                 new Notice(JSON.stringify(s, null, 2), 10000);

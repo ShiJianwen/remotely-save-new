@@ -3,7 +3,7 @@ import { FakeFs } from "./fsAll";
 
 import { TFile, TFolder, type Vault } from "obsidian";
 import { mkdirpInVault, statFix, unixTimeToStr } from "./misc";
-import { listFilesInObsFolder } from "./obsFolderLister";
+import { listFilesInObsFolder, listFilesInHiddenFolder } from "./obsFolderLister";
 import type { Profiler } from "./profiler";
 
 export class FakeFsLocal extends FakeFs {
@@ -14,6 +14,8 @@ export class FakeFsLocal extends FakeFs {
   pluginID: string;
   profiler: Profiler | undefined;
   deleteToWhere: "obsidian" | "system";
+  syncDotItems: boolean;
+  syncDotFolders: string[];
   kind: "local";
   constructor(
     vault: Vault,
@@ -22,7 +24,9 @@ export class FakeFsLocal extends FakeFs {
     configDir: string,
     pluginID: string,
     profiler: Profiler | undefined,
-    deleteToWhere: "obsidian" | "system"
+    deleteToWhere: "obsidian" | "system",
+    syncDotItems: boolean = false,
+    syncDotFolders: string[] = []
   ) {
     super();
 
@@ -33,6 +37,8 @@ export class FakeFsLocal extends FakeFs {
     this.pluginID = pluginID;
     this.profiler = profiler;
     this.deleteToWhere = deleteToWhere;
+    this.syncDotItems = syncDotItems;
+    this.syncDotFolders = syncDotFolders;
     this.kind = "local";
   }
 
@@ -113,6 +119,23 @@ export class FakeFsLocal extends FakeFs {
         local.push(f);
       }
       this.profiler?.insert("finish syncConfigDir");
+    }
+
+    if (this.syncDotItems && this.syncDotFolders.length > 0) {
+      this.profiler?.insert("into syncDotFolders");
+      for (const dotFolder of this.syncDotFolders) {
+        const folderExists = await this.vault.adapter.exists(dotFolder);
+        if (folderExists) {
+          const dotFiles = await listFilesInHiddenFolder(
+            dotFolder,
+            this.vault
+          );
+          for (const f of dotFiles) {
+            local.push(f);
+          }
+        }
+      }
+      this.profiler?.insert("finish syncDotFolders");
     }
 
     this.profiler?.insert("finish walk for local");

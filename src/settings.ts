@@ -2314,6 +2314,54 @@ export class RemotelySaveSettingTab extends PluginSettingTab {
       });
 
     new Setting(advDiv)
+      .setName(t("settings_syncdotitems"))
+      .setDesc(t("settings_syncdotitems_desc"))
+      .addDropdown((dropdown) => {
+        dropdown.addOption("disable", t("disable"));
+        dropdown.addOption("enable", t("enable"));
+        dropdown
+          .setValue(
+            `${this.plugin.settings.syncDotItems ? "enable" : "disable"}`
+          )
+          .onChange(async (val) => {
+            this.plugin.settings.syncDotItems = val === "enable";
+            await this.plugin.saveSettings();
+            this.display();
+          });
+      });
+
+    if (this.plugin.settings.syncDotItems) {
+      new Setting(advDiv)
+        .setName(t("settings_syncdotfolders_desc"))
+        .addTextArea((textArea) => {
+          textArea
+            .setPlaceholder(".stversions\n.trash")
+            .setValue(
+              (this.plugin.settings.syncDotFolders ?? []).join("\n")
+            )
+            .onChange(async (val) => {
+              const raw = val
+                .split("\n")
+                .map((x) => x.trim())
+                .filter((x) => x !== "" && x.startsWith("."))
+                .filter(
+                  (x) =>
+                    x !== ".obsidian" &&
+                    x !== ".git" &&
+                    x !== ".github" &&
+                    x !== ".gitlab" &&
+                    x !== ".svn"
+                );
+              const unique = [...new Set(raw)];
+              this.plugin.settings.syncDotFolders = unique;
+              await this.plugin.saveSettings();
+            });
+          textArea.inputEl.rows = 5;
+          textArea.inputEl.cols = 30;
+        });
+    }
+
+    new Setting(advDiv)
       .setName(t("settings_configdir"))
       .setDesc(
         t("settings_configdir_desc", {

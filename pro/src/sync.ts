@@ -32,6 +32,7 @@ import {
   getFolderLevels,
   getParentFolder,
   isHiddenPath,
+  isInsideDotFolder,
   isSpecialFolderNameToSkip,
   roughSizeOfObject,
   unixTimeToStr,
@@ -154,7 +155,9 @@ export const checkIsSkipItemOrNotByName = (
   syncUnderscoreItems: boolean,
   configDir: string,
   ignorePaths: string[],
-  onlyAllowPaths: string[]
+  onlyAllowPaths: string[],
+  syncDotItems: boolean = false,
+  syncDotFolders: string[] = []
 ): IsSkipResult => {
   if (key === undefined) {
     throw Error(`checkIsSkipItemOrNotByName meets undefinded key!`);
@@ -232,6 +235,15 @@ export const checkIsSkipItemOrNotByName = (
         finalIsIgnored = true;
       } else {
         // not config files, do not judge now, do nothing
+      }
+    }
+  }
+
+  // check user-specified dot folders exemption
+  if (finalIsIgnored === undefined) {
+    if (syncDotItems && syncDotFolders.length > 0) {
+      if (isInsideDotFolder(key, syncDotFolders)) {
+        finalIsIgnored = false;
       }
     }
   }
@@ -370,7 +382,9 @@ const ensembleMixedEnties = async (
   fsEncrypt: FakeFsEncrypt,
   serviceType: SUPPORTED_SERVICES_TYPE,
 
-  profiler: Profiler | undefined
+  profiler: Profiler | undefined,
+  syncDotItems: boolean = false,
+  syncDotFolders: string[] = []
 ): Promise<SyncPlanType> => {
   profiler?.addIndent();
   profiler?.insert("ensembleMixedEnties: enter");
@@ -398,7 +412,9 @@ const ensembleMixedEnties = async (
       syncUnderscoreItems,
       configDir,
       ignorePaths,
-      onlyAllowPaths
+      onlyAllowPaths,
+      syncDotItems,
+      syncDotFolders
     );
     skipOrNotResults[key] = skipOrNot;
     if (skipOrNot.finalIsIgnored && !key.startsWith(configDir)) {
@@ -448,7 +464,9 @@ const ensembleMixedEnties = async (
           syncUnderscoreItems,
           configDir,
           ignorePaths,
-          onlyAllowPaths
+          onlyAllowPaths,
+          syncDotItems,
+          syncDotFolders
         );
         skipOrNotResults[key] = skipOrNot;
       }
@@ -485,7 +503,9 @@ const ensembleMixedEnties = async (
         syncUnderscoreItems,
         configDir,
         ignorePaths,
-        onlyAllowPaths
+        onlyAllowPaths,
+        syncDotItems,
+        syncDotFolders
       );
       skipOrNotResults[key] = skipOrNot;
     }
@@ -2012,7 +2032,9 @@ export async function syncer(
       settings.onlyAllowPaths ?? [],
       fsEncrypt,
       settings.serviceType,
-      profiler
+      profiler,
+      settings.syncDotItems ?? false,
+      settings.syncDotFolders ?? []
     );
     profiler?.insert(`finish step${step} (build partial mixedEntity)`);
 

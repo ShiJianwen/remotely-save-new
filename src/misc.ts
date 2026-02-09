@@ -40,6 +40,32 @@ export const isHiddenPath = (item: string, dot = true, underscore = true) => {
 };
 
 /**
+ * Check if a key (file/folder path) belongs to one of the specified dot folders.
+ * @param key e.g. ".stversions/somefile.txt" or ".stversions/"
+ * @param dotFolders e.g. [".stversions", ".trash"]
+ * @returns true if key is inside or is the dot folder itself
+ */
+export const isInsideDotFolder = (
+  key: string,
+  dotFolders: string[]
+): boolean => {
+  if (!dotFolders || dotFolders.length === 0) {
+    return false;
+  }
+  for (const folder of dotFolders) {
+    const normalized = folder.replace(/\/+$/, ""); // remove trailing slashes
+    if (
+      key === `${normalized}/` ||
+      key === normalized ||
+      key.startsWith(`${normalized}/`)
+    ) {
+      return true;
+    }
+  }
+  return false;
+};
+
+/**
  * Util func for mkdir -p based on the "path" of original file or folder
  * "a/b/c/" => ["a", "a/b", "a/b/c"]
  * "a/b/c/d/e.txt" => ["a", "a/b", "a/b/c", "a/b/c/d"]
