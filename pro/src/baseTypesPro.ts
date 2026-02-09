@@ -80,7 +80,7 @@ export const GOOGLEDRIVE_CLIENT_SECRET =
 // box
 //////////////////////////////////////////////////////////
 
-export const COMMAND_CALLBACK_BOX = "remotely-save-cb-box";
+export const COMMAND_CALLBACK_BOX = "remotely-save-new-cb-box";
 export const BOX_CLIENT_ID = global.DEFAULT_BOX_CLIENT_ID;
 export const BOX_CLIENT_SECRET = global.DEFAULT_BOX_CLIENT_SECRET;
 
@@ -120,7 +120,7 @@ export interface PCloudConfig {
 // Yandex Disk
 //////////////////////////////////////////////////////////
 
-export const COMMAND_CALLBACK_YANDEXDISK = "remotely-save-cb-yandexdisk";
+export const COMMAND_CALLBACK_YANDEXDISK = "remotely-save-new-cb-yandexdisk";
 export const YANDEXDISK_CLIENT_ID = global.DEFAULT_YANDEXDISK_CLIENT_ID;
 export const YANDEXDISK_CLIENT_SECRET = global.DEFAULT_YANDEXDISK_CLIENT_SECRET;
 
@@ -173,7 +173,7 @@ export interface AzureBlobStorageConfig {
 // Onedrive (Full)
 //////////////////////////////////////////////////////////
 
-export const COMMAND_CALLBACK_ONEDRIVEFULL = "remotely-save-cb-onedrivefull";
+export const COMMAND_CALLBACK_ONEDRIVEFULL = "remotely-save-new-cb-onedrivefull";
 
 export interface OnedriveFullConfig {
   accessToken: string;

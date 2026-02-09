@@ -2742,7 +2742,7 @@ export class RemotelySaveSettingTab extends PluginSettingTab {
       .setDesc(t("settings_import_desc"))
       .addText((text) =>
         text
-          .setPlaceholder("obsidian://remotely-save?func=settings&...")
+          .setPlaceholder("obsidian://remotely-save-new?func=settings&...")
           .setValue("")
           .onChange((val) => {
             importSettingVal = val;
