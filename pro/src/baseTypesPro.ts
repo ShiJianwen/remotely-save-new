@@ -21,7 +21,7 @@ declare global {
 // PRO
 //////////////////////////////////////////////////////////
 
-export const COMMAND_CALLBACK_PRO = "remotely-save-cb-pro";
+export const COMMAND_CALLBACK_PRO = "remotely-save-new-cb-pro";
 export const PRO_CLIENT_ID = global.DEFAULT_REMOTELYSAVE_CLIENT_ID;
 export const PRO_WEBSITE = global.DEFAULT_REMOTELYSAVE_WEBSITE;
 
@@ -98,7 +98,7 @@ export interface BoxConfig {
 // pCloud
 //////////////////////////////////////////////////////////
 
-export const COMMAND_CALLBACK_PCLOUD = "remotely-save-cb-pcloud";
+export const COMMAND_CALLBACK_PCLOUD = "remotely-save-new-cb-pcloud";
 export const PCLOUD_CLIENT_ID = global.DEFAULT_PCLOUD_CLIENT_ID;
 export const PCLOUD_CLIENT_SECRET = global.DEFAULT_PCLOUD_CLIENT_SECRET;
 
@@ -139,7 +139,7 @@ export interface YandexDiskConfig {
 // Koofr
 //////////////////////////////////////////////////////////
 
-export const COMMAND_CALLBACK_KOOFR = "remotely-save-cb-koofr";
+export const COMMAND_CALLBACK_KOOFR = "remotely-save-new-cb-koofr";
 export const KOOFR_CLIENT_ID = global.DEFAULT_KOOFR_CLIENT_ID;
 export const KOOFR_CLIENT_SECRET = global.DEFAULT_KOOFR_CLIENT_SECRET;
 
